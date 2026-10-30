@@ -17,6 +17,17 @@ android {
     }
 
     buildTypes {
+        debug {
+            // АТОМАРНАЯ АКТИВАЦИЯ ЗАЩИТЫ ДЛЯ DEBUG ПАКЕТА
+            minifyEnabled true
+            
+            // Подключаем стандартные правила обфускации Google и наш файл исключений
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            
+            // Оставляем отладочную подпись, чтобы ставить APK без секретных ключей
+            signingConfig signingConfigs.debug
+        }
+
         release {
             minifyEnabled false
         }
