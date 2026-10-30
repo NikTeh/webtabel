@@ -125,7 +125,7 @@ export const UsersTab: React.FC = () => {
         return;
       }
 
-      setMessage(`Умный импорт завершен! Добавлено новых сотрудников: ${data.inserted}, обновлено существующих: ${data.updated}`);
+      setMessage(`Добавлено новых сотрудников: ${data.inserted}, обновлено существующих: ${data.updated}`);
       setFile(null);
       const fileInput = document.getElementById('user-file-input') as HTMLInputElement;
       if (fileInput) fileInput.value = '';
@@ -221,7 +221,7 @@ export const UsersTab: React.FC = () => {
         return;
       }
 
-      setMessage('Данные пользователя успешно изменены в PostgreSQL');
+      setMessage('Данные пользователя успешно изменены');
       setEditingId(null);
       loadUsers();
     } catch {

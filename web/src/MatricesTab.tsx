@@ -123,7 +123,7 @@ export const MatricesTab: React.FC = () => {
           setActiveItems(matrixData || []);
         }
       } catch (err) {
-        setError('Произошла ошибка при сборке динамической конфигурации матрицы с сервера Go');
+        setError('Произошла ошибка при сборке матрицы');
       } finally {
         setLoading(false);
       }
@@ -168,11 +168,11 @@ export const MatricesTab: React.FC = () => {
 
       const data = await response.json();
       if (!response.ok) {
-        setError(data.error || 'Ошибка при сохранении матрицы дистрибьюции');
+        setError(data.error || 'Ошибка при сохранении матрицы');
         return;
       }
 
-      setMessage(`Матрица успешно сохранена в PostgreSQL! Записано чекбоксов: ${data.saved_checkboxes_count}`);
+      setMessage(`Матрица успешно сохранена! Записано чекбоксов: ${data.saved_checkboxes_count}`);
     } catch {
       setError('Не удалось отправить пакет данных матрицы на бэкенд');
     } finally {
@@ -243,7 +243,7 @@ export const MatricesTab: React.FC = () => {
             
             <div style={{ padding: '15px', backgroundColor: '#f8f9fa', borderTop: '1px solid #ddd', display: 'flex', justifyContent: 'flex-end' }}>
               <button onClick={handleSave} disabled={saving} style={{ padding: '10px 25px', backgroundColor: '#0275d8', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>
-                {saving ? 'Сохранение...' : 'Сохранить матрицу дистрибьюции'}
+                {saving ? 'Сохранение...' : 'Сохранить матрицу'}
               </button>
             </div>
           </div>

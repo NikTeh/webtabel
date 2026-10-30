@@ -54,7 +54,7 @@ export const SvStoresTab: React.FC = () => {
         setStores(data || []);
       }
     } catch {
-      setError('Ошибка получения адресной программы с сервера Go');
+      setError('Ошибка получения адресной программы');
     } finally {
       setLoading(false);
     }

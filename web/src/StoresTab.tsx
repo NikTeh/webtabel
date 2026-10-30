@@ -100,7 +100,7 @@ export const StoresTab: React.FC = () => {
       // Перезапускаем чтение из базы, чтобы обновить таблицу на экране владельца
       loadStoresFromDb();
     } catch (err) {
-      setError('Критическая ошибка отправки файла на сервер бэкенда');
+      setError('Ошибка отправки файла на сервер бэкенда');
     } finally {
       setUploading(false);
     }

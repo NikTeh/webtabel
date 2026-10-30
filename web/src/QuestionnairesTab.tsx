@@ -249,80 +249,6 @@ export const QuestionnairesTab: React.FC = () => {
     setCurrentQuestions(swap(current));
   };
 
-  //   // МОНОЛИТНЫЙ ВЫЧИСЛИТЕЛЬ: Проверяет характер правок и вызывает нужный эндпоинт Go без дублирования узлов
-  // const handleSmartSave = async () => {
-  //   if (!manufacturerId) return;
-  //   setMessage(''); setError('');
-
-  //   // ИСПРАВЛЕНО ДЛЯ ПРОДАКШН: На сервер должны улетать только корневые вопросы, подвопросы внутри них!
-  //   const rootQuestionsPayload = [...generalQuestions, ...skuQuestions];
-    
-  //   // Собираем плоский массив исключительно для анализа наличия новых вопросов (проверка по db_id)
-  //   const allFlatNodesForCheck = tyrannicalFlatten(rootQuestionsPayload);
-  //   const hasNewQuestions = allFlatNodesForCheck.some(q => !q.db_id);
-
-  //   if (!hasNewQuestions && currentVersion > 0) {
-  //     // Сценарий Б: Косметическое изменение формулировок вопросов
-  //     const confirmText = window.confirm(`Вы изменили только текст формулировок. Структура анкеты не нарушена.\nОбновить тексты внутри текущей Версии №${currentVersion} без создания новой?`);
-  //     if (!confirmText) return;
-
-  //     setSaving(true);
-  //     try {
-  //       const payload = allFlatNodesForCheck.map(q => ({
-  //         id: q.db_id,
-  //         question_text: q.question_text
-  //       }));
-
-  //       const response = await fetch('/api/v1/owner/questionnaires/update-text', {
-  //         method: 'PUT',
-  //         headers: getHeaders(),
-  //         body: JSON.stringify(payload)
-  //       });
-  //       if (response.ok) {
-  //         setMessage('Формулировки вопросов успешно обновлены внутри текущей версии!');
-  //       } else {
-  //         setError('Ошибка обновления текстов на сервере Go');
-  //       }
-  //     } catch {
-  //       setError('Сбой сети при обновлении текстов');
-  //     } finally {
-  //       setSaving(false);
-  //     }
-  //   } else {
-  //     // Сценарий А: Структурное изменение — Создание новой версии
-  //     const nextVer = currentVersion + 1;
-  //     const confirmStructure = window.confirm(`Внимание! Обнаружены изменения в структуре анкеты (добавлены новые вопросы или изменены типы).\nБудет создана новая Версия №${nextVer}. Вы уверены?`);
-  //     if (!confirmStructure) return;
-
-  //     setSaving(true);
-  //     try {
-  //       const response = await fetch('/api/v1/owner/questionnaires/save', {
-  //         method: 'POST',
-  //         headers: getHeaders(),
-  //         // ИСПРАВЛЕНО: передаем строго структурированное дерево корневых элементов
-  //         body: JSON.stringify({
-  //           manufacturer_id: Number(manufacturerId),
-  //           is_auto_clone_enabled: isAutoCloneEnabled, // <--- Передаем флаг в JSON пакете            
-  //           questions: rootQuestionsPayload
-  //         })
-  //       });
-  //       const data = await response.json();
-  //       if (response.ok) {
-  //         setMessage(`Новая структура успешно утверждена! Создана Версия №${data.version || nextVer}`);
-  //         setCurrentVersion(data.version || nextVer);
-  //         setGeneralQuestions([]);
-  //         setSkuQuestions([]);
-  //       } else {
-  //         setError(data.error || 'Ошибка сохранения новой версии');
-  //       }
-  //     } catch {
-  //       setError('Сбой сети при создании новой версии');
-  //     } finally {
-  //       setSaving(false);
-  //     }
-  //   }
-  // };
-
     const handleSmartSave = async () => {
     if (!manufacturerId) return;
     setMessage(''); setError('');
@@ -354,7 +280,7 @@ export const QuestionnairesTab: React.FC = () => {
         if (response.ok) {
           setMessage('Формулировки вопросов успешно обновлены внутри текущей версии!');
         } else {
-          setError('Ошибка обновления текстов на сервере Go');
+          setError('Ошибка обновления текстов на сервере');
         }
       } catch {
         setError('Сбой сети при обновлении текстов');

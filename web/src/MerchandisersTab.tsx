@@ -50,7 +50,7 @@ export const MerchandisersTab: React.FC = () => {
       setMessage(`Успешно импортировано мерчандайзеров: ${data.imported_merchandisers_count}`);
       setFile(null);
     } catch (err) {
-      setError('Не удалось отправить файл на сервер бэкенда');
+      setError('Не удалось отправить файл на сервер');
     } finally {
       setUploading(false);
     }

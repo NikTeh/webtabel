@@ -141,7 +141,7 @@ export const ReportsTab: React.FC = () => {
           if (mfgRes.ok) setManufacturers(await mfgRes.json());
         }
       } catch (err) {
-        console.error('Ошибка загрузки мастер-справочников фильтрации');
+        console.error('Ошибка загрузки справочников фильтрации');
       }
     };
     loadFiltersData();
@@ -197,7 +197,7 @@ export const ReportsTab: React.FC = () => {
       if (activeSubTab === 'photos') setPhotosData(data || []);
       if (activeSubTab === 'data') setAnswersData(data || []);
     } catch {
-      setValidationError('Сбой связи сGo-сервером бэкенда');
+      setValidationError('Сбой связи с сервером');
     } finally {
       setLoading(false);
     }
@@ -407,13 +407,8 @@ export const ReportsTab: React.FC = () => {
                   {dbSupervisors.map(s => <option key={s.id} value={s.id}>{s.full_name}</option>)}
                 </select>
               </div>
-              {/* {activeSubTab === 'map' && (
-                <div>
-                  <label style={{ display: 'block', marginBottom: '5px', fontSize: '13px', fontWeight: 'bold' }}>Мерчандайзер:</label>
-                  <input type="text" value={meFilter} onChange={e => setMeFilter(e.target.value)} placeholder="ФИО МЕ" style={{ padding: '6px', border: '1px solid #ccc', borderRadius: '4px', width: '130px' }} />
-                </div>
-              )} */}
-                            {activeSubTab === 'map' && (
+              
+              {activeSubTab === 'map' && (
                 <div style={{ position: 'relative' }}>
                   <label style={{ display: 'block', marginBottom: '5px', fontSize: '13px', fontWeight: 'bold' }}>Мерчандайзер:</label>
                   <input 
@@ -530,15 +525,6 @@ export const ReportsTab: React.FC = () => {
           </div>
         )}
 
-        {/* {!loading && activeSubTab === 'map' && (
-          <div>
-            <h4>Карта визитов за смену: {dateSingle}</h4>
-            <div style={{ width: '100%', height: '400px', backgroundColor: '#eef3f7', border: '1px solid #ccc', borderRadius: '6px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-              <span style={{ fontSize: '18px', fontWeight: 'bold', color: '#0275d8' }}>🗺️ [ Слой гео-меток API Яндекс Карт Загружен ]</span>
-              <p style={{ fontSize: '13px', color: '#555' }}>Активных точек на карте: <strong>{visitsData.length}</strong></p>
-            </div>
-          </div>
-        )} */}
         {!loading && activeSubTab === 'map' && (
           <div>
             <h4 style={{ marginBottom: '10px' }}>Карта перемещений за смену: {dateSingle}</h4>
@@ -547,22 +533,7 @@ export const ReportsTab: React.FC = () => {
           </div>
         )}
 
-        {/* {!loading && activeSubTab === 'photos' && (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px' }}>
-            {photosData.map((photo, idx) => (
-              <div key={idx} style={{ border: '1px solid #ddd', borderRadius: '6px', padding: '12px', backgroundColor: '#fafafa', fontSize: '11px' }}>
-                <img src={photo.s3_url} alt="Выкладка" style={{ width: '100%', height: '180px', objectFit: 'cover', borderRadius: '4px', marginBottom: '10px' }} />
-                <p style={{ margin: '0 0 4px 0' }}><strong>ID точки:</strong> {photo.store_id} | <strong>Бренд:</strong> {photo.manufacturer_name}</p>
-                <p style={{ margin: '0 0 4px 0' }}><strong>МЕ ФИО:</strong> {photo.me_name} ({photo.me_phone})</p>
-                <p style={{ margin: '0 0 4px 0' }}><strong>Визит:</strong> {photo.started_at} ({photo.duration})</p>
-                <p style={{ margin: '0 0 8px 0', color: '#555' }}><strong>Адрес:</strong> {photo.address}</p>
-                <button onClick={() => window.open(photo.s3_url, '_blank')} style={{ width: '100%', padding: '6px', backgroundColor: '#fff', border: '1px solid #0275d8', color: '#0275d8', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>📥 Скачать оригинал из S3</button>
-              </div>
-            ))}
-          </div>
-        )} */}
-
-        <div>
+      <div>
       {!loading && activeSubTab === 'photos' && (
         <div>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '15px', alignItems: 'center' }}>
@@ -601,7 +572,7 @@ export const ReportsTab: React.FC = () => {
           {hasMorePhotos && (
             <div style={{ textAlign: 'center', marginTop: '20px' }}>
               <button onClick={handleLoadMorePhotos} disabled={loading} style={{ padding: '10px 25px', backgroundColor: '#0275d8', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>
-                {loading ? 'Загрузка порции...' : '▼ Загрузить еще 20 кадров'}
+                {loading ? 'Загрузка ...' : '▼ Загрузить еще 20 кадров'}
               </button>
             </div>
           )}

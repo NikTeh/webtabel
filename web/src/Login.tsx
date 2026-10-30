@@ -66,7 +66,7 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
 
       onLoginSuccess(phone.trim(), password, data.role, data.name || 'Пользователь');
     } catch (err) {
-      setError('Не удалось связаться с сервером бэкенда. Для теста введите логин: admin, пароль: admin');
+      setError('Не удалось связаться с сервером.');
     } finally {
       setLoading(false);
     }

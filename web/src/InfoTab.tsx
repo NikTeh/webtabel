@@ -139,7 +139,7 @@ export const InfoTab: React.FC = () => {
         setMatrices(formattedMatrices);
 
       } catch (err) {
-        console.error('Ошибка динамической сборки массивов аналитики');
+        console.error('Ошибка сборки массивов аналитики');
       } finally {
         setLoading(false);
       }
@@ -148,7 +148,7 @@ export const InfoTab: React.FC = () => {
     loadInfoData();
   }, [manufacturerId, manufacturers]);
   const handleExportXlsx = (tableNumber: number) => {
-    alert(`Запрос на генерацию Excel-отчета для Таблицы №${tableNumber} отправлен на Go бэкенд.`);
+    alert(`Запрос на генерацию Excel-отчета для Таблицы №${tableNumber} отправлен`);
   };
 
   const subMenuQueryStyle = (isActive: boolean) => ({
@@ -331,7 +331,7 @@ export const InfoTab: React.FC = () => {
           </div>
         </div>
       ) : (
-        <p style={{ color: '#999', fontStyle: 'italic' }}>Выберите производителя из списка выше для формирования аналитических сводов.</p>
+        <p style={{ color: '#999', fontStyle: 'italic' }}>Выберите производителя из списка выше для формирования аналитических отчетов.</p>
       )}
     </div>
   );

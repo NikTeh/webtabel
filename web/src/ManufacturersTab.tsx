@@ -104,7 +104,7 @@ export const ManufacturersTab: React.FC = () => {
       await loadManufacturers();
       setSelectedManufacturerId(String(data.id));
     } catch {
-      setCardMsg({ text: 'Не удалось связаться с сервером бэкенда', isError: true });
+      setCardMsg({ text: 'Не удалось связаться с сервером', isError: true });
     }
   };
 
@@ -139,36 +139,6 @@ export const ManufacturersTab: React.FC = () => {
     }
   };
 
-
-  // Привязка адресной программы (1С кодов точек) к выбранному клиенту
-  // const handleStoreUpload = async () => {
-  //   if (!selectedManufacturerId || !storeFile) return;
-  //   setStoreMsg({ text: '', isError: false });
-
-  //   const formData = new FormData();
-  //   formData.append('file', storeFile);
-
-  //   try {
-  //     const authHeaders = getHeaders();
-  //     delete (authHeaders as any)['Content-Type'];
-
-  //     const response = await fetch(`/api/v1/owner/manufacturers/stores/import?manufacturer_id=${selectedManufacturerId}`, {
-  //       method: 'POST',
-  //       headers: authHeaders as Record<string, string>, 
-  //       body: formData       
-  //     });
-
-  //     const data = await response.json();
-  //     if (!response.ok) {
-  //       setStoreMsg({ text: data.error || 'Ошибка импорта точек', isError: true });
-  //       return;
-  //     }
-  //     setStoreMsg({ text: `Успешно привязано магазинов к данному бренду: ${data.inserted}`, isError: false });
-  //     setStoreFile(null);
-  //   } catch {
-  //     setStoreMsg({ text: 'Ошибка отправки файла на сервер', isError: true });
-  //   }
-  // };
 
     const handleStoreUpload = async () => {
     if (!selectedManufacturerId || !storeFile) return;
