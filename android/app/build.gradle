@@ -1,0 +1,72 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+}
+
+android {
+    namespace 'com.mg.sfa'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.mg.sfa"
+        minSdk 26 // Обеспечивает поддержку Java Time API для оффлайн дат
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17 // Строго по ТЗ
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.4.3'
+    }
+}
+
+dependencies {
+    // Базовые системные библиотеки Android
+    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
+    implementation 'androidx.activity:activity-compose:1.7.2'
+    
+    // Единый BOM-управляющий для Jetpack Compose (Следит за версиями всех модулей)
+    implementation platform('androidx.compose:compose-bom:2023.05.01')
+    
+    // Исправленные официальные модули интерфейса Jetpack Compose
+    implementation 'androidx.compose.ui:ui'
+    implementation 'androidx.compose.ui:ui-graphics'
+    implementation 'androidx.compose.material3:material3:1.1.0'
+
+    // Локальная оффлайн-БД SQLite Room (Строго по ТЗ пункт 3.1)
+    implementation 'androidx.room:room-runtime:2.5.2'
+    implementation 'androidx.room:room-ktx:2.5.2'
+    kapt 'androidx.room:room-compiler:2.5.2'
+
+    // Сетевой API-клиент для синхронизации с Go-бэкендом
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+
+    def camerax_version = "1.3.4"
+    implementation "androidx.camera:camera-core:${camerax_version}"
+    implementation "androidx.camera:camera-camera2:${camerax_version}"
+    implementation "androidx.camera:camera-lifecycle:${camerax_version}"
+    implementation "androidx.camera:camera-view:${camerax_version}"
+
+    // Легковесный промышленный движок асинхронного рендеринга миниатюр фотоотчетов
+    implementation("io.coil-kt:coil-compose:2.4.0")
+
+}
+

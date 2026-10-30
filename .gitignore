@@ -1,0 +1,22 @@
+# 🔴 БЛОКИРОВКА СЕКРЕТОВ И ПАРОЛЕЙ (Самое важное!)
+.env
+backend/.env
+backend/cmd/server/.env
+
+# Локальные файлы настроек операционной системы и редакторов
+.DS_Store
+.idea/
+.vscode/
+*.log
+
+# Тяжелые папки зависимостей и сборки (их Docker и npm соберут на сервере сами)
+node_modules/
+web/node_modules/
+web/dist/
+backend/mg-backend
+
+# Временный кэш и APK-сборки Android приложения Николая
+.gradle/
+android/.gradle/
+android/app/build/
+*.jks
