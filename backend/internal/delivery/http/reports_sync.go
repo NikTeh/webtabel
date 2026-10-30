@@ -44,19 +44,6 @@ func SyncVisitReportsHandler(db *pgxpool.Pool) http.HandlerFunc {
 			return
 		}
 
-		// var req SyncReportsRequest
-		// if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		// 	w.WriteHeader(http.StatusBadRequest)
-		// 	w.Write([]byte(`{"error": "Некорректный формат JSON"}`))
-		// 	return
-		// }
-
-		// if req.VisitID == "" || len(req.Reports) == 0 {
-		// 	w.WriteHeader(http.StatusBadRequest)
-		// 	w.Write([]byte(`{"error": "Пустой идентификатор визита или отсутствуют отчёты"}`))
-		// 	return
-		// }
-
 		var req SyncReportsRequest
 		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 			w.WriteHeader(http.StatusBadRequest)
@@ -171,7 +158,7 @@ func SyncVisitReportsHandler(db *pgxpool.Pool) http.HandlerFunc {
 		// Фиксируем транзакцию в PostgreSQL
 		if err := tx.Commit(ctx); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(`{"error": "Не удалось зафиксировать транзакцию отчётов в PostgreSQL"}`))
+			w.Write([]byte(`{"error": "Не удалось зафиксировать транзакцию отчётов"}`))
 
 			// ВЫВОДИМ РЕАЛЬНУЮ ПРИЧИНУ СБОЯ ТРАНЗАКЦИИ ОТ СУБД
 			// fmt.Println("КРИТИЧЕСКАЯ ОШИБКА COMMIT:", err)

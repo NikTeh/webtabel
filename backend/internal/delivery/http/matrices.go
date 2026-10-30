@@ -50,7 +50,7 @@ func GetMatrixHandler(db *pgxpool.Pool) http.HandlerFunc {
 		rows, err := db.Query(ctx, query, mID)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(`{"error": "Ошибка чтения матрицы дистрибьюции из PostgreSQL"}`))
+			w.Write([]byte(`{"error": "Ошибка чтения матрицы"}`))
 			return
 		}
 		defer rows.Close()
@@ -106,7 +106,7 @@ func SaveMatrixHandler(db *pgxpool.Pool) http.HandlerFunc {
 		_, err = tx.Exec(ctx, "DELETE FROM store_matrices WHERE manufacturer_id = $1", req.ManufacturerID)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(`{"error": "Ошибка очистки предыдущей матрицы дистрибьюции"}`))
+			w.Write([]byte(`{"error": "Ошибка очистки предыдущей матрицы"}`))
 			return
 		}
 
@@ -132,7 +132,7 @@ func SaveMatrixHandler(db *pgxpool.Pool) http.HandlerFunc {
 
 		if err := tx.Commit(ctx); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(`{"error": "Ошибка сохранения транзакции матрицы в PostgreSQL"}`))
+			w.Write([]byte(`{"error": "Ошибка сохранения транзакции матрицы"}`))
 			return
 		}
 

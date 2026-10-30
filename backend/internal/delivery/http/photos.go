@@ -169,7 +169,7 @@ func PhotoUploadHandler(db *pgxpool.Pool) http.HandlerFunc {
 		err = db.QueryRow(ctx, findAnswerQuery, s3Key).Scan(&realAnswerRowID)
 		if err != nil {
 			// Если анкетный отчет по сети еще не успел дойти до PostgreSQL, прерываем транзакцию фото
-			fmt.Printf("🛑 [S3] Строка ответа еще не создана в БД для ключа: %s (%v)\n", s3Key, err)
+			fmt.Printf("[S3] Строка ответа еще не создана в БД для ключа: %s (%v)\n", s3Key, err)
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}

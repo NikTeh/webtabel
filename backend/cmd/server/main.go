@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"context"
+
 	"fmt"
 	"log"
 	"net/http"
@@ -44,43 +45,65 @@ func loadEnv() {
 }
 
 func main() {
-	// Автоматически загружаем параметры из текстового файла при старте бэкенда
+	// 1. НАСТРОЙКА ОКРУЖЕНИЯ: Загружаем параметры из файла .env при старте бэкенда
 	loadEnv()
 
+	// Настройка системного порта бэкенда
 	port := os.Getenv("SERVER_PORT")
 	if port == "" {
 		port = "8080"
 	}
 
-	dbURL := os.Getenv("DATABASE_URL")
-	if dbURL == "" {
-		log.Fatalf("КРИТИЧЕСКАЯ ОШИБКА ДЕПЛОЯ: Переменная DATABASE_URL не задана в файле .env\n")
+	// 2. КОНФИГУРАЦИЯ ОБЪЕКТНОГО ХРАНИЛИЩА S3 (Для фотографий выкладки)
+	s3Bucket := os.Getenv("S3_BUCKET_NAME")
+	s3KeyID := os.Getenv("AWS_ACCESS_KEY_ID")
+	s3Secret := os.Getenv("AWS_SECRET_ACCESS_KEY")
+	// s3Region := os.Getenv("AWS_REGION")
+
+	// Верифицируем критически важные ключи S3 перед запуском сервера
+	if s3Bucket == "" || s3KeyID == "" || s3Secret == "" {
+		log.Println("[WARN] Параметры объектного хранилища S3 не заполнены в файле .env")
 	}
 
-	// Проверка наличия ключей S3 перед запуском
-	if os.Getenv("AWS_ACCESS_KEY_ID") == "" || os.Getenv("S3_BUCKET_NAME") == "" {
-		log.Fatalf("КРИТИЧЕСКАЯ ОШИБКА ДЕПЛОЯ: Ключи доступа S3 Timeweb Cloud не обнаружены в .env\n")
+	// 3. КОНФИГУРАЦИЯ СУБД: Собираем чистую строку подключения (DSN) из раздельных переменных
+	dbHost := os.Getenv("POSTGRESQL_HOST")
+	dbPort := os.Getenv("POSTGRESQL_PORT")
+	dbUser := os.Getenv("POSTGRESQL_USER")
+	dbPass := os.Getenv("POSTGRESQL_PASSWORD")
+	dbName := os.Getenv("POSTGRESQL_DBNAME")
+	dbSlm := os.Getenv("POSTGRESQL_SSLMODE")
+	dbSlr := os.Getenv("POSTGRESQL_SSLROOTCERT")
+
+	if dbPort == "" {
+		dbPort = "5432"
 	}
 
-	// ИСПРАВЛЕHО ДЛЯ ПРОДАКШHА: Контекст для безопасной проверки связи при старте сервера
-	pingCtx, pingCancel := context.WithTimeout(context.Background(), 3*time.Second)
+	// Собираем классическую DSN-строку. Переезжая в Selectel, мы сможем гибко управлять sslmode через .env
+	dbURL := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s&sslrootcert=%s",
+		dbUser, dbPass, dbHost, dbPort, dbName, dbSlm, dbSlr)
+
+	// Контекст с таймаутом в 15 секунд, чтобы локальный тест связи не зависал бесконечно
+	pingCtx, pingCancel := context.WithTimeout(context.Background(), 15*time.Second)
 	defer pingCancel()
 
 	fmt.Printf("Подключение к PostgreSQL...\n")
-	// Пул создается на независимом фоне context.Background(), чтобы не обрывать долгие Multipart-запросы
+
+	// Создаем отказоустойчивый промышленный пул соединений
 	dbPool, err := pgxpool.New(context.Background(), dbURL)
 	if err != nil {
 		log.Fatalf("Не удалось создать пул соединений: %v\n", err)
 	}
 	defer dbPool.Close()
 
-	// Выполняем проверочный пинг с коротким таймаутом
+	// Выполняем проверочный пинг СУБД
 	err = dbPool.Ping(pingCtx)
 	if err != nil {
 		log.Fatalf("База данных недоступна: %v\n", err)
 	} else {
 		fmt.Printf("Успешное подключение к PostgreSQL!\n")
 	}
+
+	// 4. ЗАПУСК МАРШРУТИЗАЦИИ И СЕРВЕРА
 
 	corsHandler := func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -368,19 +391,9 @@ func main() {
 	mux.Handle("/api/v1/config/map", deliveryHttp.BasicAuthMiddleware(dbPool)(deliveryHttp.GetMapConfigHandler(dbPool)))
 	mux.Handle("/api/v1/reports/filters/merchandisers", deliveryHttp.BasicAuthMiddleware(dbPool)(deliveryHttp.GetReportMerchandisersHandler(dbPool)))
 
-	// Оборачиваем глобальный роутер Go в лимитер размера
-	// finalHandler := middleware.RequestSizeLimiterMiddleware(http.DefaultServeMux)
-
-	// fmt.Printf("=== Старт промышленного бэкенда MG ===\n")
-	// fmt.Printf("Сервер запущен на порту: %s\n", port)
-
-	// if err := http.ListenAndServe(":"+port, finalHandler); err != nil {
-	// 	log.Fatalf("Критическая ошибка запуска сервера: %v\n", err)
-	// }
-
 	finalHandler := middleware.RequestSizeLimiterMiddleware(corsHandler(mux))
 
-	fmt.Printf("=== Старт промышленного защищенного бэкенда MG ===\n")
+	fmt.Printf("=== Старт ===\n")
 	if err := http.ListenAndServe(":"+port, finalHandler); err != nil {
 		log.Fatalf("Критическая ошибка запуска сервера: %v\n", err)
 	}

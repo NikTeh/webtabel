@@ -128,7 +128,7 @@ func ManageUsersHandler(db *pgxpool.Pool) http.HandlerFunc {
 					return
 				}
 				w.WriteHeader(http.StatusInternalServerError)
-				w.Write([]byte(`{"error": "Ошибка обновления данных пользователя в СУБД"}`))
+				w.Write([]byte(`{"error": "Ошибка обновления данных пользователя"}`))
 				return
 			}
 

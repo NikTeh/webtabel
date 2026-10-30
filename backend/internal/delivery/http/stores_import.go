@@ -68,8 +68,8 @@ func ImportStoresHandler(db *pgxpool.Pool) http.HandlerFunc {
 			return
 		}
 
-		// Техническая защита: лимит 20 МБ на файл по условиям проекта
-		r.Body = http.MaxBytesReader(w, r.Body, 20*1024*1024)
+		// Техническая защита: лимит 100 МБ на файл по условиям проекта
+		r.Body = http.MaxBytesReader(w, r.Body, 100*1024*1024)
 
 		file, _, err := r.FormFile("file")
 		if err != nil {
@@ -188,7 +188,7 @@ func ImportStoresHandler(db *pgxpool.Pool) http.HandlerFunc {
 
 		if err := tx.Commit(ctx); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(`{"error": "Ошибка фиксации изменений в PostgreSQL"}`))
+			w.Write([]byte(`{"error": "Ошибка фиксации изменений"}`))
 			return
 		}
 

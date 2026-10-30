@@ -177,7 +177,7 @@ func UpdateQuestionTextsHandler(db *pgxpool.Pool) http.HandlerFunc {
 
 		if err := tx.Commit(ctx); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(`{"error": "Ошибка фиксации изменений в PostgreSQL"}`))
+			w.Write([]byte(`{"error": "Ошибка фиксации изменений"}`))
 			return
 		}
 

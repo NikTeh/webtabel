@@ -61,8 +61,8 @@ func ImportUsersHandler(db *pgxpool.Pool) http.HandlerFunc {
 			return
 		}
 
-		// Техническая защита: Ограничение размера файла в 20 МБ по ТЗ
-		r.Body = http.MaxBytesReader(w, r.Body, 20*1024*1024)
+		// Техническая защита: Ограничение размера файла в 100 МБ по ТЗ
+		r.Body = http.MaxBytesReader(w, r.Body, 100*1024*1024)
 
 		file, _, err := r.FormFile("file")
 		if err != nil {

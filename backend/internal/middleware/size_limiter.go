@@ -4,8 +4,8 @@ import (
 	"net/http"
 )
 
-// MaxUploadSize устанавливает жесткий лимит в 20 МБ для XLSX и фото (Пункт 41 ТЗ)
-const MaxUploadSize = 20 * 1024 * 1024
+// MaxUploadSize устанавливает жесткий лимит в 100 МБ для XLSX и фото (Пункт 41 ТЗ)
+const MaxUploadSize = 100 * 1024 * 1024
 
 // RequestSizeLimiterMiddleware блокирует тяжелые пакеты до их попадания в память сервера
 func RequestSizeLimiterMiddleware(next http.Handler) http.Handler {

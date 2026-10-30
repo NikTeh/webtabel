@@ -16,8 +16,8 @@ func ImportMerchandisersHandler(db *pgxpool.Pool) http.HandlerFunc {
 		w.Header().Set("Content-Type", "application/json")
 		ctx := r.Context()
 
-		// 1. Техническая защита по ТЗ (Максимум 10 МБ)
-		r.Body = http.MaxBytesReader(w, r.Body, 10*1024*1024)
+		// 1. Техническая защита по ТЗ (Максимум 100 МБ)
+		r.Body = http.MaxBytesReader(w, r.Body, 100*1024*1024)
 
 		file, _, err := r.FormFile("file")
 		if err != nil {
@@ -43,10 +43,10 @@ func ImportMerchandisersHandler(db *pgxpool.Pool) http.HandlerFunc {
 			return
 		}
 
-		// 2. Техническая защита: лимит на 2000 строк
-		if len(rows) > 2000 {
+		// 2. Техническая защита: лимит на 50000 строк
+		if len(rows) > 50000 {
 			w.WriteHeader(http.StatusRequestEntityTooLarge)
-			w.Write([]byte(`{"error": "Файл превышает лимит в 2000 строк"}`))
+			w.Write([]byte(`{"error": "Файл превышает лимит в 50000 строк"}`))
 			return
 		}
 

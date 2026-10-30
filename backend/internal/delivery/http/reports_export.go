@@ -77,7 +77,7 @@ func ExportVisitsXlsxHandler(db *pgxpool.Pool) http.HandlerFunc {
 		rows, err := db.Query(ctx, sqlQuery, args...)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(`{"error": "Ошибка извлечения строк посещений из PostgreSQL"}`))
+			w.Write([]byte(`{"error": "Ошибка извлечения посещений"}`))
 			return
 		}
 		defer rows.Close()
@@ -170,7 +170,7 @@ func ExportAnswersXlsxHandler(db *pgxpool.Pool) http.HandlerFunc {
 		rows, err := db.Query(ctx, sqlQuery, mIDStr, dateFrom, dateTo)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(`{"error": "Ошибка извлечения анкетных строк из PostgreSQL"}`))
+			w.Write([]byte(`{"error": "Ошибка извлечения анкетных данных"}`))
 			return
 		}
 		defer rows.Close()

@@ -109,7 +109,7 @@ func ImportSkusHandler(db *pgxpool.Pool) http.HandlerFunc {
 			rows, err := db.Query(ctx, query, mID)
 			if err != nil {
 				w.WriteHeader(http.StatusInternalServerError)
-				w.Write([]byte(`{"error": "Ошибка получения номенклатуры SKU из БД"}`))
+				w.Write([]byte(`{"error": "Ошибка получения списка SKU из БД"}`))
 				return
 			}
 			defer rows.Close()

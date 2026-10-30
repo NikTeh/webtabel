@@ -96,7 +96,7 @@ func SaveQuestionnaireHandler(db *pgxpool.Pool) http.HandlerFunc {
 			err = saveQuestionNode(ctx, tx, questionnaireID, nil, qNode, uuidToDbIdMap)
 			if err != nil {
 				w.WriteHeader(http.StatusInternalServerError)
-				w.Write([]byte(`{"error": "Ошибка при записи дерева вопросов анкеты: ` + err.Error() + `"}`))
+				w.Write([]byte(`{"error": "Ошибка при записи вопросов анкеты: ` + err.Error() + `"}`))
 				return
 			}
 		}
@@ -106,7 +106,7 @@ func SaveQuestionnaireHandler(db *pgxpool.Pool) http.HandlerFunc {
 			err = resolveInterQuestionDependencies(ctx, tx, qNode, uuidToDbIdMap)
 			if err != nil {
 				w.WriteHeader(http.StatusInternalServerError)
-				w.Write([]byte(`{"error": "Ошибка разрешения межвопросовых связей: ` + err.Error() + `"}`))
+				w.Write([]byte(`{"error": "Ошибка связей: ` + err.Error() + `"}`))
 				return
 			}
 		}
