@@ -16,19 +16,19 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
     
     // ВРЕМЕННЫЙ ДЕМО-ВХОД ДЛЯ ТЕСТИРОВАНИЯ ИНТЕРФЕЙСА БЕЗ БД
     if (phone.trim() === 'admin' && password === 'admin*!1') {
-      onLoginSuccess('admin', 'admin', 'owner', 'Владелец (Тест)');
+      onLoginSuccess('admin', password, 'owner', 'Администратор');
       return;
     }
 
         // ДОБАВИТЬ ЭТОТ БЛОК ДЛЯ ТЕСТА КАБИНЕТА СВ
     if (phone.trim() === 'sv' && password === 'sv*!1') {
-      onLoginSuccess('sv', 'sv', 'supervisor', 'Иванов И.И. (Супервайзер)');
+      onLoginSuccess('sv', password, 'supervisor', 'Супервайзер)');
       return;
     }
 
         // ДОБАВИТЬ ЭТОТ БЛОК ДЛЯ ТЕСТА КАБИНЕТА ПРОИЗВОДИТЕЛЯ
     if (phone.trim() === 'client' && password === 'client*!1') {
-      onLoginSuccess('client', 'client', 'manufacturer', 'Представитель Coca-Cola');
+      onLoginSuccess('client', password, 'manufacturer', 'Производитель');
       return;
     }
 
